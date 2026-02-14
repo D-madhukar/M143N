@@ -83,7 +83,6 @@
             display: none;
             text-align: center;
             position: relative;
-            /* Pushes everything down to show the background */
             margin-top: 40vh; 
         }
 
@@ -93,6 +92,8 @@
             display: flex;
             justify-content: center;
             gap: 20px;
+            /* Critical for the swap to work */
+            flex-direction: row; 
         }
 
         button {
@@ -102,17 +103,17 @@
             border: none;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            touch-action: manipulation;
         }
 
         #yesBtn, #promiseBtn { background: var(--primary); color: white; }
-        #noBtn { background: #eee; color: #555; }
+        #noBtn { background: #eee; color: #555; position: relative; }
 
         #promiseBtn { margin-top: 15px; display: none; }
 
         #successArea, #parisArea { display: none; }
         
-        /* Paris Text Transition Effect */
         #parisTextContent {
             opacity: 0;
             transform: translateY(20px);
@@ -155,7 +156,7 @@
             <h1>Will you be my Valentine, Navya? 🌹</h1>
             <div class="btn-group" id="btnGroup">
                 <button id="yesBtn" onclick="showSuccess()">Yes</button>
-                <button id="noBtn" onmouseover="swapButtons()" onclick="swapButtons()">No</button>
+                <button id="noBtn" onmouseover="swapButtons()" onmousedown="swapButtons()" ontouchstart="swapButtons()">No</button>
             </div>
         </div>
 
@@ -188,9 +189,18 @@
             document.getElementById('overlay').style.display = 'block';
         }
 
-        function swapButtons() {
+        // IMPROVED SWAP LOGIC
+        function swapButtons(e) {
+            // Prevent the actual click/touch from doing anything other than swapping
+            if(e) e.preventDefault();
+            
             const btnGroup = document.getElementById('btnGroup');
-            btnGroup.style.flexDirection = btnGroup.style.flexDirection === 'row-reverse' ? 'row' : 'row-reverse';
+            // If it's normal, make it reverse. If it's reverse, make it normal.
+            if (btnGroup.style.flexDirection === 'row-reverse') {
+                btnGroup.style.flexDirection = 'row';
+            } else {
+                btnGroup.style.flexDirection = 'row-reverse';
+            }
         }
 
         function showSuccess() {
@@ -220,24 +230,18 @@
         }
 
         function showParis() {
-            // Lower the container even more for Paris view
             document.getElementById('mainContainer').style.marginTop = '45vh';
-            
-            // Background transition
             document.getElementById('personalBg').style.opacity = '0';
             document.getElementById('parisBg').style.opacity = '1';
-            
-            // Content switch
             document.getElementById('successArea').style.display = 'none';
             document.getElementById('parisArea').style.display = 'block';
             
-            // DELAYED TEXT REVEAL: Wait for background to fade in first
             setTimeout(() => {
                 const textEl = document.getElementById('parisTextContent');
                 textEl.style.opacity = '1';
                 textEl.style.transform = 'translateY(0)';
                 createHearts(50);
-            }, 2000); // 2 second delay so she sees the tower first
+            }, 2000); 
         }
 
         function createHearts(count) {
