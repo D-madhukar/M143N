@@ -8,7 +8,7 @@
         :root {
             --primary: #ff4d6d;
             --secondary: #ffb3c1;
-            --glass: rgba(255, 255, 255, 0.85);
+            --glass: rgba(255, 255, 255, 0.88);
         }
 
         body, html {
@@ -19,7 +19,7 @@
             font-family: 'Georgia', serif;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: center; /* Initial center for envelope */
             background-color: #fff0f3;
             overflow: hidden;
         }
@@ -38,14 +38,14 @@
             z-index: 1;
         }
 
-        /* Overlay to make text readable */
+        /* Overlay to darken background slightly for readability */
         #overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.15);
             display: none;
             z-index: 2;
         }
@@ -58,49 +58,52 @@
             animation: float 3s ease-in-out infinite;
         }
 
-        .heart-icon { font-size: 100px; text-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .heart-icon { font-size: 100px; filter: drop-shadow(0 5px 15px rgba(255, 77, 109, 0.4)); }
 
-        /* Main Message Container */
+        /* Main Message Container - Moved Lower */
         .container {
             background: var(--glass);
-            backdrop-filter: blur(10px);
-            padding: 40px;
+            backdrop-filter: blur(8px);
+            padding: 30px;
             border-radius: 25px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
             max-width: 400px;
             width: 85%;
             z-index: 10;
             display: none;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            border: 1px solid white;
+            /* Positioning logic to move it lower */
+            position: relative;
+            margin-top: 15vh; 
         }
 
-        h1 { color: var(--primary); font-size: 1.8rem; line-height: 1.3; }
+        h1 { color: var(--primary); font-size: 1.6rem; margin-bottom: 20px; }
 
+        /* Swap Container Logic */
         .btn-group {
             display: flex;
             justify-content: center;
             gap: 20px;
             position: relative;
-            margin-top: 30px;
+            transition: all 0.3s ease;
         }
 
         button {
-            padding: 12px 35px;
+            padding: 12px 30px;
             font-size: 1.1rem;
             border-radius: 50px;
             border: none;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s ease;
+            min-width: 100px;
         }
 
-        #yesBtn { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3); }
-        #noBtn { background: #eee; color: #555; }
+        #yesBtn { background: var(--primary); color: white; }
+        #noBtn { background: #eee; color: #555; transition: none; }
 
-        /* Final Content */
         #successArea { display: none; }
-        .love-letter { font-size: 1.2rem; color: #4a0e0e; line-height: 1.6; }
+        .love-letter { font-size: 1.1rem; color: #4a0e0e; line-height: 1.5; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
@@ -126,12 +129,12 @@
 
     <div id="envelope" onclick="openLetter()">
         <div class="heart-icon">💌</div>
-        <p style="color: var(--primary); font-weight: bold; font-family: sans-serif; margin-top: 15px;">A digital surprise for Navya...</p>
+        <p style="color: var(--primary); font-weight: bold; margin-top: 15px;">Click to open, Navya...</p>
     </div>
 
     <div class="container" id="mainContainer">
         <div id="questionArea">
-            <h1>Will you be my Valentine,<br>Navya? 🌹</h1>
+            <h1>Will you be my Valentine, Navya? 🌹</h1>
             <div class="btn-group" id="btnGroup">
                 <button id="yesBtn" onclick="showSuccess()">Yes</button>
                 <button id="noBtn" onmouseover="swapButtons()" onclick="swapButtons()">No</button>
@@ -140,13 +143,12 @@
 
         <div id="successArea">
             <div class="love-letter">
-                <p id="typingText" style="font-weight: bold; font-size: 1.4rem; color: var(--primary);"></p>
+                <p id="typingText" style="font-weight: bold; font-size: 1.3rem; color: var(--primary); margin-bottom: 5px;"></p>
                 <div id="finalMessage" style="display:none; opacity: 0; transition: opacity 1.5s;">
                     <p>To my wonderful wifey,</p>
                     <p>Every moment with you is a gift. You fill my life with so much joy and endless love.</p>
-                    <hr style="border: 0; border-top: 1px solid var(--secondary); margin: 20px 0;">
-                    <h2 style="color: var(--primary); margin-bottom: 5px;">I Love You! ❤️</h2>
-                    <p style="margin-top: 0;">Happy Valentine's Day!</p>
+                    <h2 style="color: var(--primary); margin: 15px 0 5px 0;">I Love You! ❤️</h2>
+                    <p style="margin-top: 0; font-weight: bold;">Happy Valentine's Day!</p>
                 </div>
             </div>
         </div>
@@ -156,30 +158,33 @@
         function openLetter() {
             document.getElementById('envelope').style.display = 'none';
             document.getElementById('mainContainer').style.display = 'block';
+            // Align container lower after opening
+            document.body.style.alignItems = 'center'; 
         }
 
+        // SWAP LOGIC: Switches the order of buttons in the flexbox
         function swapButtons() {
             const btnGroup = document.getElementById('btnGroup');
-            btnGroup.style.flexDirection = btnGroup.style.flexDirection === 'row-reverse' ? 'row' : 'row-reverse';
+            if (btnGroup.style.flexDirection === 'row-reverse') {
+                btnGroup.style.flexDirection = 'row';
+            } else {
+                btnGroup.style.flexDirection = 'row-reverse';
+            }
         }
 
         function showSuccess() {
-            // Reveal Background Photo
             document.getElementById('bgPhoto').style.opacity = '1';
             document.getElementById('overlay').style.display = 'block';
-            
-            // Switch content
             document.getElementById('questionArea').style.display = 'none';
             document.getElementById('successArea').style.display = 'block';
             
-            // Typing effect
             const text = "You just made my heart bloom! 🌸";
             let i = 0;
             function typeWriter() {
                 if (i < text.length) {
                     document.getElementById("typingText").innerHTML += text.charAt(i);
                     i++;
-                    setTimeout(typeWriter, 80);
+                    setTimeout(typeWriter, 70);
                 } else {
                     const final = document.getElementById('finalMessage');
                     final.style.display = 'block';
