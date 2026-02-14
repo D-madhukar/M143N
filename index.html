@@ -24,7 +24,6 @@
             overflow: hidden;
         }
 
-        /* Background Layers */
         .bg-layer {
             position: fixed;
             top: 0;
@@ -33,19 +32,25 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            transition: opacity 1.5s ease;
+            transition: opacity 1.2s ease;
             z-index: 1;
         }
 
-        /* Initial Eiffel Tower Background */
-        #eiffelBg {
-            background-image: url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=2000&auto=format&fit=crop');
+        /* PAGE 1 & 2 BACKGROUND: Romantic Roses */
+        #romanticBg {
+            background-image: url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=2000&auto=format&fit=crop');
             opacity: 0;
         }
 
-        /* Personal Photo Background */
+        /* PAGE 3 BACKGROUND: Personal Photo */
         #personalBg {
-            background-image: url('us.jpg'); /* Ensure your photo is named us.jpg */
+            background-image: url('us.jpg');
+            opacity: 0;
+        }
+
+        /* PAGE 4 BACKGROUND: Paris Eiffel Tower */
+        #parisBg {
+            background-image: url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=2000&auto=format&fit=crop');
             opacity: 0;
         }
 
@@ -60,7 +65,6 @@
             display: none;
         }
 
-        /* Envelope */
         #envelope {
             cursor: pointer;
             text-align: center;
@@ -70,7 +74,6 @@
 
         .heart-icon { font-size: 100px; filter: drop-shadow(0 5px 15px rgba(255, 77, 109, 0.4)); }
 
-        /* Container - Lower Position */
         .container {
             background: var(--glass);
             backdrop-filter: blur(8px);
@@ -82,7 +85,7 @@
             z-index: 10;
             display: none;
             text-align: center;
-            margin-top: 25vh; /* Moves it lower to see the tower/faces */
+            margin-top: 20vh;
         }
 
         h1 { color: var(--primary); font-size: 1.6rem; margin-bottom: 25px; }
@@ -101,14 +104,15 @@
             border: none;
             cursor: pointer;
             font-weight: bold;
-            min-width: 100px;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
         }
 
-        #yesBtn { background: var(--primary); color: white; }
+        #yesBtn, #promiseBtn { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3); }
         #noBtn { background: #eee; color: #555; }
 
-        #successArea { display: none; }
+        #promiseBtn { margin-top: 20px; display: none; }
+
+        #successArea, #parisArea { display: none; }
         .love-letter { font-size: 1.15rem; color: #4a0e0e; line-height: 1.6; }
 
         @keyframes float {
@@ -130,13 +134,14 @@
 </head>
 <body>
 
-    <div id="eiffelBg" class="bg-layer"></div>
+    <div id="romanticBg" class="bg-layer"></div>
     <div id="personalBg" class="bg-layer"></div>
+    <div id="parisBg" class="bg-layer"></div>
     <div id="overlay"></div>
 
     <div id="envelope" onclick="openLetter()">
         <div class="heart-icon">💌</div>
-        <p style="color: var(--primary); font-weight: bold; margin-top: 15px;">Click to open, Navya...</p>
+        <p style="color: var(--primary); font-weight: bold; margin-top: 15px;">A secret for Navya...</p>
     </div>
 
     <div class="container" id="mainContainer">
@@ -151,12 +156,22 @@
         <div id="successArea">
             <div class="love-letter">
                 <p id="typingText" style="font-weight: bold; font-size: 1.3rem; color: var(--primary);"></p>
-                <div id="finalMessage" style="display:none; opacity: 0; transition: opacity 1.5s;">
+                <div id="finalMessage" style="display:none; opacity: 0; transition: opacity 1s;">
                     <p>To my wonderful wifey,</p>
                     <p>Every moment with you is a gift. You fill my life with so much joy and endless love.</p>
-                    <h2 style="color: var(--primary); margin: 15px 0 5px 0;">I Love You! ❤️</h2>
-                    <p style="margin-top: 0; font-weight: bold;">Happy Valentine's Day!</p>
+                    <h2 style="color: var(--primary); margin: 15px 0 5px 0;">I love you Ammmaaadee♥️🥰</h2>
+                    <button id="promiseBtn" onclick="showParis()">My Promise 💌</button>
                 </div>
+            </div>
+        </div>
+
+        <div id="parisArea">
+            <div class="love-letter">
+                <h2 style="color: var(--primary);">Our Anniversary Promise 🗼</h2>
+                <p>Pack your bags, my love!</p>
+                <p style="font-size: 1.3rem; font-weight: bold;">We are going to Paris for our anniversary! 🌹✈️</p>
+                <p>I can't wait to see the world with you.</p>
+                <h3 style="color: var(--primary);">Forever Yours. ❤️</h3>
             </div>
         </div>
     </div>
@@ -165,25 +180,18 @@
         function openLetter() {
             document.getElementById('envelope').style.display = 'none';
             document.getElementById('mainContainer').style.display = 'block';
-            document.getElementById('eiffelBg').style.opacity = '1';
+            document.getElementById('romanticBg').style.opacity = '1';
             document.getElementById('overlay').style.display = 'block';
         }
 
         function swapButtons() {
             const btnGroup = document.getElementById('btnGroup');
-            // Toggle the flex direction to swap buttons
-            if (btnGroup.style.flexDirection === 'row-reverse') {
-                btnGroup.style.flexDirection = 'row';
-            } else {
-                btnGroup.style.flexDirection = 'row-reverse';
-            }
+            btnGroup.style.flexDirection = btnGroup.style.flexDirection === 'row-reverse' ? 'row' : 'row-reverse';
         }
 
         function showSuccess() {
-            // Fade out Eiffel, Fade in Personal Photo
-            document.getElementById('eiffelBg').style.opacity = '0';
+            document.getElementById('romanticBg').style.opacity = '0';
             document.getElementById('personalBg').style.opacity = '1';
-            
             document.getElementById('questionArea').style.display = 'none';
             document.getElementById('successArea').style.display = 'block';
             
@@ -197,16 +205,32 @@
                 } else {
                     const final = document.getElementById('finalMessage');
                     final.style.display = 'block';
-                    setTimeout(() => final.style.opacity = '1', 100);
+                    setTimeout(() => {
+                        final.style.opacity = '1';
+                        document.getElementById('promiseBtn').style.display = 'inline-block';
+                    }, 100);
                 }
             }
             typeWriter();
             createHearts();
         }
 
+        function showParis() {
+            // Change background to Paris
+            document.getElementById('personalBg').style.opacity = '0';
+            document.getElementById('parisBg').style.opacity = '1';
+            
+            // Switch content
+            document.getElementById('successArea').style.display = 'none';
+            document.getElementById('parisArea').style.display = 'block';
+            
+            // Add extra celebratory hearts
+            createHearts();
+        }
+
         function createHearts() {
-            const symbols = ['❤️', '💖', '🌹', '🌸'];
-            for (let i = 0; i < 50; i++) {
+            const symbols = ['❤️', '💖', '🌹', '🌸', '✨'];
+            for (let i = 0; i < 40; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
                     heart.className = 'falling-heart';
@@ -215,7 +239,7 @@
                     heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
                     heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
                     document.body.appendChild(heart);
-                }, i * 200);
+                }, i * 150);
             }
         }
     </script>
