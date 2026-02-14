@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For My Navya 🌹</title>
     <style>
         :root {
@@ -22,6 +22,8 @@
             align-items: center;
             background-color: #fff0f3;
             overflow: hidden;
+            /* Prevents blue highlight on mobile taps */
+            -webkit-tap-highlight-color: transparent;
         }
 
         .bg-layer {
@@ -92,7 +94,6 @@
             display: flex;
             justify-content: center;
             gap: 20px;
-            /* Critical for the swap to work */
             flex-direction: row; 
         }
 
@@ -103,12 +104,12 @@
             border: none;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.2s ease;
-            touch-action: manipulation;
+            transition: all 0.1s ease-in-out;
+            touch-action: none; /* Prevents default touch actions */
         }
 
         #yesBtn, #promiseBtn { background: var(--primary); color: white; }
-        #noBtn { background: #eee; color: #555; position: relative; }
+        #noBtn { background: #eee; color: #555; user-select: none; }
 
         #promiseBtn { margin-top: 15px; display: none; }
 
@@ -156,7 +157,10 @@
             <h1>Will you be my Valentine, Navya? 🌹</h1>
             <div class="btn-group" id="btnGroup">
                 <button id="yesBtn" onclick="showSuccess()">Yes</button>
-                <button id="noBtn" onmouseover="swapButtons()" onmousedown="swapButtons()" ontouchstart="swapButtons()">No</button>
+                <button id="noBtn" 
+                    onmouseover="swapButtons(event)" 
+                    ontouchstart="swapButtons(event)" 
+                    onclick="swapButtons(event)">No</button>
             </div>
         </div>
 
@@ -189,18 +193,21 @@
             document.getElementById('overlay').style.display = 'block';
         }
 
-        // IMPROVED SWAP LOGIC
+        // REFINED SWAP LOGIC
         function swapButtons(e) {
-            // Prevent the actual click/touch from doing anything other than swapping
-            if(e) e.preventDefault();
+            // STOP the click from bubbling up
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             
             const btnGroup = document.getElementById('btnGroup');
-            // If it's normal, make it reverse. If it's reverse, make it normal.
             if (btnGroup.style.flexDirection === 'row-reverse') {
                 btnGroup.style.flexDirection = 'row';
             } else {
                 btnGroup.style.flexDirection = 'row-reverse';
             }
+            return false;
         }
 
         function showSuccess() {
