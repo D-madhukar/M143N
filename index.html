@@ -8,7 +8,7 @@
         :root {
             --primary: #ff4d6d;
             --secondary: #ffb3c1;
-            --glass: rgba(255, 255, 255, 0.88);
+            --glass: rgba(255, 255, 255, 0.82);
         }
 
         body, html {
@@ -32,23 +32,20 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            transition: opacity 1.2s ease;
+            transition: opacity 2s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1;
         }
 
-        /* PAGE 1 & 2 BACKGROUND: Romantic Roses */
         #romanticBg {
             background-image: url('https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=2000&auto=format&fit=crop');
             opacity: 0;
         }
 
-        /* PAGE 3 BACKGROUND: Personal Photo */
         #personalBg {
             background-image: url('us.jpg');
             opacity: 0;
         }
 
-        /* PAGE 4 BACKGROUND: Paris Eiffel Tower */
         #parisBg {
             background-image: url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=2000&auto=format&fit=crop');
             opacity: 0;
@@ -60,7 +57,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.15);
             z-index: 2;
             display: none;
         }
@@ -76,30 +73,31 @@
 
         .container {
             background: var(--glass);
-            backdrop-filter: blur(8px);
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            max-width: 400px;
+            backdrop-filter: blur(5px);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            max-width: 380px;
             width: 85%;
             z-index: 10;
             display: none;
             text-align: center;
-            margin-top: 20vh;
+            position: relative;
+            /* Pushes everything down to show the background */
+            margin-top: 40vh; 
         }
 
-        h1 { color: var(--primary); font-size: 1.6rem; margin-bottom: 25px; }
+        h1 { color: var(--primary); font-size: 1.5rem; margin-bottom: 20px; }
 
         .btn-group {
             display: flex;
             justify-content: center;
             gap: 20px;
-            position: relative;
         }
 
         button {
-            padding: 12px 30px;
-            font-size: 1.1rem;
+            padding: 12px 28px;
+            font-size: 1rem;
             border-radius: 50px;
             border: none;
             cursor: pointer;
@@ -107,13 +105,21 @@
             transition: all 0.3s ease;
         }
 
-        #yesBtn, #promiseBtn { background: var(--primary); color: white; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3); }
+        #yesBtn, #promiseBtn { background: var(--primary); color: white; }
         #noBtn { background: #eee; color: #555; }
 
-        #promiseBtn { margin-top: 20px; display: none; }
+        #promiseBtn { margin-top: 15px; display: none; }
 
         #successArea, #parisArea { display: none; }
-        .love-letter { font-size: 1.15rem; color: #4a0e0e; line-height: 1.6; }
+        
+        /* Paris Text Transition Effect */
+        #parisTextContent {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 2s ease;
+        }
+
+        .love-letter { font-size: 1.1rem; color: #4a0e0e; line-height: 1.5; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
@@ -141,7 +147,7 @@
 
     <div id="envelope" onclick="openLetter()">
         <div class="heart-icon">💌</div>
-        <p style="color: var(--primary); font-weight: bold; margin-top: 15px;">A secret for Navya...</p>
+        <p style="color: var(--primary); font-weight: bold; margin-top: 10px;">A special secret for Navya...</p>
     </div>
 
     <div class="container" id="mainContainer">
@@ -155,23 +161,21 @@
 
         <div id="successArea">
             <div class="love-letter">
-                <p id="typingText" style="font-weight: bold; font-size: 1.3rem; color: var(--primary);"></p>
+                <p id="typingText" style="font-weight: bold; font-size: 1.2rem; color: var(--primary);"></p>
                 <div id="finalMessage" style="display:none; opacity: 0; transition: opacity 1s;">
                     <p>To my wonderful wifey,</p>
-                    <p>Every moment with you is a gift. You fill my life with so much joy and endless love.</p>
-                    <h2 style="color: var(--primary); margin: 15px 0 5px 0;">I love you Ammmaaadee♥️🥰</h2>
+                    <h2 style="color: var(--primary); margin: 10px 0;">I love you Ammmaaadee♥️🥰</h2>
                     <button id="promiseBtn" onclick="showParis()">My Promise 💌</button>
                 </div>
             </div>
         </div>
 
         <div id="parisArea">
-            <div class="love-letter">
+            <div id="parisTextContent" class="love-letter">
                 <h2 style="color: var(--primary);">Our Anniversary Promise 🗼</h2>
                 <p>Pack your bags, my love!</p>
-                <p style="font-size: 1.3rem; font-weight: bold;">We are going to Paris for our anniversary! 🌹✈️</p>
-                <p>I can't wait to see the world with you.</p>
-                <h3 style="color: var(--primary);">Forever Yours. ❤️</h3>
+                <p style="font-size: 1.2rem; font-weight: bold;">We are going to Paris for our anniversary! 🌹✈️</p>
+                <h3 style="color: var(--primary); margin-top: 10px;">Forever Yours. ❤️</h3>
             </div>
         </div>
     </div>
@@ -212,25 +216,33 @@
                 }
             }
             typeWriter();
-            createHearts();
+            createHearts(30);
         }
 
         function showParis() {
-            // Change background to Paris
+            // Lower the container even more for Paris view
+            document.getElementById('mainContainer').style.marginTop = '45vh';
+            
+            // Background transition
             document.getElementById('personalBg').style.opacity = '0';
             document.getElementById('parisBg').style.opacity = '1';
             
-            // Switch content
+            // Content switch
             document.getElementById('successArea').style.display = 'none';
             document.getElementById('parisArea').style.display = 'block';
             
-            // Add extra celebratory hearts
-            createHearts();
+            // DELAYED TEXT REVEAL: Wait for background to fade in first
+            setTimeout(() => {
+                const textEl = document.getElementById('parisTextContent');
+                textEl.style.opacity = '1';
+                textEl.style.transform = 'translateY(0)';
+                createHearts(50);
+            }, 2000); // 2 second delay so she sees the tower first
         }
 
-        function createHearts() {
-            const symbols = ['❤️', '💖', '🌹', '🌸', '✨'];
-            for (let i = 0; i < 40; i++) {
+        function createHearts(count) {
+            const symbols = ['❤️', '💖', '🌹', '✨'];
+            for (let i = 0; i < count; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
                     heart.className = 'falling-heart';
