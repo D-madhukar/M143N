@@ -19,38 +19,48 @@
             font-family: 'Georgia', serif;
             display: flex;
             justify-content: center;
-            align-items: center; /* Initial center for envelope */
+            align-items: center;
             background-color: #fff0f3;
             overflow: hidden;
         }
 
-        /* Full Screen Background Photo */
-        #bgPhoto {
+        /* Background Layers */
+        .bg-layer {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('us.jpg') no-repeat center center;
             background-size: cover;
-            opacity: 0;
-            transition: opacity 2s ease;
+            background-position: center;
+            transition: opacity 1.5s ease;
             z-index: 1;
         }
 
-        /* Overlay to darken background slightly for readability */
+        /* Initial Eiffel Tower Background */
+        #eiffelBg {
+            background-image: url('https://images.unsplash.com/photo-1511739001486-6bfe10ce785f?q=80&w=2000&auto=format&fit=crop');
+            opacity: 0;
+        }
+
+        /* Personal Photo Background */
+        #personalBg {
+            background-image: url('us.jpg'); /* Ensure your photo is named us.jpg */
+            opacity: 0;
+        }
+
         #overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.15);
-            display: none;
+            background: rgba(0, 0, 0, 0.2);
             z-index: 2;
+            display: none;
         }
 
-        /* Initial Envelope */
+        /* Envelope */
         #envelope {
             cursor: pointer;
             text-align: center;
@@ -60,33 +70,28 @@
 
         .heart-icon { font-size: 100px; filter: drop-shadow(0 5px 15px rgba(255, 77, 109, 0.4)); }
 
-        /* Main Message Container - Moved Lower */
+        /* Container - Lower Position */
         .container {
             background: var(--glass);
             backdrop-filter: blur(8px);
             padding: 30px;
             border-radius: 25px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
             max-width: 400px;
             width: 85%;
             z-index: 10;
             display: none;
             text-align: center;
-            border: 1px solid white;
-            /* Positioning logic to move it lower */
-            position: relative;
-            margin-top: 15vh; 
+            margin-top: 25vh; /* Moves it lower to see the tower/faces */
         }
 
-        h1 { color: var(--primary); font-size: 1.6rem; margin-bottom: 20px; }
+        h1 { color: var(--primary); font-size: 1.6rem; margin-bottom: 25px; }
 
-        /* Swap Container Logic */
         .btn-group {
             display: flex;
             justify-content: center;
             gap: 20px;
             position: relative;
-            transition: all 0.3s ease;
         }
 
         button {
@@ -97,13 +102,14 @@
             cursor: pointer;
             font-weight: bold;
             min-width: 100px;
+            transition: transform 0.2s;
         }
 
         #yesBtn { background: var(--primary); color: white; }
-        #noBtn { background: #eee; color: #555; transition: none; }
+        #noBtn { background: #eee; color: #555; }
 
         #successArea { display: none; }
-        .love-letter { font-size: 1.1rem; color: #4a0e0e; line-height: 1.5; }
+        .love-letter { font-size: 1.15rem; color: #4a0e0e; line-height: 1.6; }
 
         @keyframes float {
             0%, 100% { transform: translateY(0); }
@@ -113,7 +119,7 @@
         .falling-heart {
             position: fixed;
             top: -50px;
-            z-index: 5;
+            z-index: 15;
             animation: fall linear forwards;
         }
 
@@ -124,7 +130,8 @@
 </head>
 <body>
 
-    <div id="bgPhoto"></div>
+    <div id="eiffelBg" class="bg-layer"></div>
+    <div id="personalBg" class="bg-layer"></div>
     <div id="overlay"></div>
 
     <div id="envelope" onclick="openLetter()">
@@ -143,7 +150,7 @@
 
         <div id="successArea">
             <div class="love-letter">
-                <p id="typingText" style="font-weight: bold; font-size: 1.3rem; color: var(--primary); margin-bottom: 5px;"></p>
+                <p id="typingText" style="font-weight: bold; font-size: 1.3rem; color: var(--primary);"></p>
                 <div id="finalMessage" style="display:none; opacity: 0; transition: opacity 1.5s;">
                     <p>To my wonderful wifey,</p>
                     <p>Every moment with you is a gift. You fill my life with so much joy and endless love.</p>
@@ -158,13 +165,13 @@
         function openLetter() {
             document.getElementById('envelope').style.display = 'none';
             document.getElementById('mainContainer').style.display = 'block';
-            // Align container lower after opening
-            document.body.style.alignItems = 'center'; 
+            document.getElementById('eiffelBg').style.opacity = '1';
+            document.getElementById('overlay').style.display = 'block';
         }
 
-        // SWAP LOGIC: Switches the order of buttons in the flexbox
         function swapButtons() {
             const btnGroup = document.getElementById('btnGroup');
+            // Toggle the flex direction to swap buttons
             if (btnGroup.style.flexDirection === 'row-reverse') {
                 btnGroup.style.flexDirection = 'row';
             } else {
@@ -173,8 +180,10 @@
         }
 
         function showSuccess() {
-            document.getElementById('bgPhoto').style.opacity = '1';
-            document.getElementById('overlay').style.display = 'block';
+            // Fade out Eiffel, Fade in Personal Photo
+            document.getElementById('eiffelBg').style.opacity = '0';
+            document.getElementById('personalBg').style.opacity = '1';
+            
             document.getElementById('questionArea').style.display = 'none';
             document.getElementById('successArea').style.display = 'block';
             
