@@ -22,7 +22,6 @@
             align-items: center;
             background-color: #fff0f3;
             overflow: hidden;
-            /* Prevents blue highlight on mobile taps */
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -105,7 +104,7 @@
             cursor: pointer;
             font-weight: bold;
             transition: all 0.1s ease-in-out;
-            touch-action: none; /* Prevents default touch actions */
+            touch-action: none;
         }
 
         #yesBtn, #promiseBtn { background: var(--primary); color: white; }
@@ -170,6 +169,7 @@
                 <div id="finalMessage" style="display:none; opacity: 0; transition: opacity 1s;">
                     <p>To my wonderful wifey,</p>
                     <h2 style="color: var(--primary); margin: 10px 0;">I love you Ammmaaadee♥️🥰</h2>
+                    <h3 style="color: var(--primary); margin-top: 5px;">Happy Valentine's Day!</h3>
                     <button id="promiseBtn" onclick="showParis()">My Promise 💌</button>
                 </div>
             </div>
@@ -193,20 +193,13 @@
             document.getElementById('overlay').style.display = 'block';
         }
 
-        // REFINED SWAP LOGIC
         function swapButtons(e) {
-            // STOP the click from bubbling up
             if (e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
-            
             const btnGroup = document.getElementById('btnGroup');
-            if (btnGroup.style.flexDirection === 'row-reverse') {
-                btnGroup.style.flexDirection = 'row';
-            } else {
-                btnGroup.style.flexDirection = 'row-reverse';
-            }
+            btnGroup.style.flexDirection = (btnGroup.style.flexDirection === 'row-reverse') ? 'row' : 'row-reverse';
             return false;
         }
 
