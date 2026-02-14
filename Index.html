@@ -1,1 +1,150 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Navya</title>
+    <style>
+        body {
+            background-color: #fff0f3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(255, 71, 126, 0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            align-items: center;
+        }
+
+        button {
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #yesBtn {
+            background-color: #ff477e;
+            color: white;
+        }
+
+        #noBtn {
+            background-color: #ffb3c1;
+            color: #d63384;
+            position: relative;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .hearts-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .success-msg {
+            font-size: 1.8rem;
+            color: #c9184a;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hearts-bg" id="hearts"></div>
+
+    <div class="container" id="mainContainer">
+        <div id="questionArea">
+            <h1>Will you be my valentine, Navya? 🌹</h1>
+            <div class="buttons">
+                <button id="yesBtn" onclick="showSuccess()">Yes</button>
+                <button id="noBtn" onmouseover="moveButton()">No</button>
+            </div>
+        </div>
+
+        <div id="successArea" class="hidden">
+            <h1 class="success-msg">
+                You just made my heart bloom, wifey! ❤️<br>
+                <span style="font-size: 3rem;">🌹🌹🌹</span><br>
+                <strong>Happy Valentine's Day!</strong>
+            </h1>
+        </div>
+    </div>
+
+    <script>
+        // Logic to make the 'No' button run away
+        const noBtn = document.getElementById('noBtn');
+        
+        function moveButton() {
+            // Calculate random positions within the viewport
+            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = x + 'px';
+            noBtn.style.top = y + 'px';
+        }
+
+        // Logic to show success message
+        function showSuccess() {
+            document.getElementById('questionArea').classList.add('hidden');
+            document.getElementById('successArea').classList.remove('hidden');
+            createHearts();
+        }
+
+        // Add falling hearts effect
+        function createHearts() {
+            const container = document.getElementById('hearts');
+            for (let i = 0; i < 50; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = '❤️';
+                heart.style.position = 'fixed';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = '-20px';
+                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                heart.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
+                container.appendChild(heart);
+            }
+        }
+    </script>
+
+    <style>
+        @keyframes fall {
+            to {
+                transform: translateY(105vh) rotate(360deg);
+            }
+        }
+    </style>
+</body>
+</html>
