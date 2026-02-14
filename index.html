@@ -1,150 +1,172 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Navya</title>
+    <title>For My Navya 🌹</title>
     <style>
+        :root {
+            --primary: #ff4d6d;
+            --secondary: #ffb3c1;
+            --bg: #fff0f3;
+        }
+
         body {
-            background-color: #fff0f3;
+            background-color: var(--bg);
+            margin: 0;
+            font-family: 'Apple Chancery', cursive, 'Georgia', serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
-            text-align: center;
+            transition: background-color 2s ease;
         }
 
+        /* Initial Envelope State */
+        #envelope {
+            cursor: pointer;
+            text-align: center;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .heart-icon {
+            font-size: 80px;
+            color: var(--primary);
+        }
+
+        /* Main Container */
         .container {
             background: white;
-            padding: 3rem;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(255, 71, 126, 0.2);
-            position: relative;
+            padding: 40px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
+            max-width: 400px;
+            width: 90%;
             z-index: 10;
+            display: none;
         }
 
-        h1 {
-            color: #d63384;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-        }
+        h1 { color: var(--primary); margin-bottom: 25px; font-size: 2rem; }
 
-        .buttons {
+        .btn-group {
             display: flex;
             justify-content: center;
             gap: 20px;
+            height: 60px;
             align-items: center;
         }
 
         button {
-            padding: 15px 35px;
-            font-size: 1.2rem;
-            border-radius: 50px;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 25px;
             border: none;
             cursor: pointer;
-            transition: transform 0.2s;
+            font-weight: bold;
+            transition: all 0.3s ease;
         }
 
-        #yesBtn {
-            background-color: #ff477e;
-            color: white;
+        #yesBtn { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4); }
+        #noBtn { background: var(--secondary); color: var(--primary); position: relative; }
+
+        /* Success State */
+        #successArea { display: none; }
+        .success-text { font-size: 1.5rem; color: #800f2f; line-height: 1.6; }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
         }
 
-        #noBtn {
-            background-color: #ffb3c1;
-            color: #d63384;
-            position: relative;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        .hearts-bg {
+        .falling-element {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: -50px;
             pointer-events: none;
+            z-index: 1;
+            animation: fall linear forwards;
         }
 
-        .success-msg {
-            font-size: 1.8rem;
-            color: #c9184a;
-            line-height: 1.5;
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
         }
     </style>
 </head>
 <body>
 
-    <div class="hearts-bg" id="hearts"></div>
+    <div id="envelope" onclick="openLetter()">
+        <div class="heart-icon">💌</div>
+        <p style="color: #ff4d6d; font-weight: bold;">Click to open, Navya</p>
+    </div>
 
     <div class="container" id="mainContainer">
         <div id="questionArea">
-            <h1>Will you be my valentine, Navya? 🌹</h1>
-            <div class="buttons">
-                <button id="yesBtn" onclick="showSuccess()">Yes</button>
-                <button id="noBtn" onmouseover="moveButton()">No</button>
+            <h1>Will you be my Valentine, Navya? 🌹</h1>
+            <div class="btn-group">
+                <button id="yesBtn" onclick="showSuccess()">Yes!</button>
+                <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
             </div>
         </div>
 
-        <div id="successArea" class="hidden">
-            <h1 class="success-msg">
-                You just made my heart bloom, wifey! ❤️<br>
-                <span style="font-size: 3rem;">🌹🌹🌹</span><br>
-                <strong>Happy Valentine's Day!</strong>
-            </h1>
+        <div id="successArea">
+            <div class="success-text">
+                <p id="typingText"></p>
+                <h2 style="font-size: 3rem; margin: 10px 0;">🌹❤️🌹</h2>
+                <h3 style="color: var(--primary);">Happy Valentine's Day!</h3>
+            </div>
         </div>
     </div>
 
     <script>
-        // Logic to make the 'No' button run away
-        const noBtn = document.getElementById('noBtn');
-        
+        function openLetter() {
+            document.getElementById('envelope').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'block';
+            startFloating('❤️', 15);
+        }
+
         function moveButton() {
-            // Calculate random positions within the viewport
-            const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-            
-            noBtn.style.position = 'absolute';
-            noBtn.style.left = x + 'px';
-            noBtn.style.top = y + 'px';
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
         }
 
-        // Logic to show success message
         function showSuccess() {
-            document.getElementById('questionArea').classList.add('hidden');
-            document.getElementById('successArea').classList.remove('hidden');
-            createHearts();
+            document.getElementById('questionArea').style.display = 'none';
+            document.getElementById('successArea').style.display = 'block';
+            document.body.style.backgroundColor = '#ffb3c1';
+            
+            const text = "You just made my heart bloom, wifey...";
+            let i = 0;
+            function typeWriter() {
+                if (i < text.length) {
+                    document.getElementById("typingText").innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 100);
+                }
+            }
+            typeWriter();
+            startFloating('🌹', 30);
+            startFloating('🌸', 20);
         }
 
-        // Add falling hearts effect
-        function createHearts() {
-            const container = document.getElementById('hearts');
-            for (let i = 0; i < 50; i++) {
-                const heart = document.createElement('div');
-                heart.innerHTML = '❤️';
-                heart.style.position = 'fixed';
-                heart.style.left = Math.random() * 100 + 'vw';
-                heart.style.top = '-20px';
-                heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
-                heart.style.animation = `fall ${Math.random() * 3 + 2}s linear forwards`;
-                container.appendChild(heart);
+        function startFloating(symbol, count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const el = document.createElement('div');
+                    el.innerHTML = symbol;
+                    el.className = 'falling-element';
+                    el.style.left = Math.random() * 100 + 'vw';
+                    el.style.fontSize = (Math.random() * 20 + 20) + 'px';
+                    el.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    el.style.opacity = Math.random();
+                    document.body.appendChild(el);
+                }, i * 100);
             }
         }
     </script>
-
-    <style>
-        @keyframes fall {
-            to {
-                transform: translateY(105vh) rotate(360deg);
-            }
-        }
-    </style>
 </body>
 </html>
