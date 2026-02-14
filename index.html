@@ -14,47 +14,43 @@
         body {
             background-color: var(--bg);
             margin: 0;
-            font-family: 'Apple Chancery', cursive, 'Georgia', serif;
+            font-family: 'Georgia', serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            transition: background-color 2s ease;
+            transition: background-color 1s ease;
         }
 
-        /* Initial Envelope State */
         #envelope {
             cursor: pointer;
             text-align: center;
             animation: float 3s ease-in-out infinite;
         }
 
-        .heart-icon {
-            font-size: 80px;
-            color: var(--primary);
-        }
+        .heart-icon { font-size: 80px; }
 
-        /* Main Container */
         .container {
             background: white;
             padding: 40px;
             border-radius: 30px;
             box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
             max-width: 400px;
-            width: 90%;
+            width: 85%;
             z-index: 10;
             display: none;
+            text-align: center;
         }
 
-        h1 { color: var(--primary); margin-bottom: 25px; font-size: 2rem; }
+        h1 { color: var(--primary); font-size: 1.8rem; margin-bottom: 30px; }
 
+        /* The trick: A container that allows buttons to swap */
         .btn-group {
             display: flex;
             justify-content: center;
             gap: 20px;
-            height: 60px;
-            align-items: center;
+            position: relative;
         }
 
         button {
@@ -64,17 +60,16 @@
             border: none;
             cursor: pointer;
             font-weight: bold;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            min-width: 100px;
         }
 
-        #yesBtn { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(255, 77, 109, 0.4); }
-        #noBtn { background: var(--secondary); color: var(--primary); position: relative; }
+        #yesBtn { background: var(--primary); color: white; }
+        #noBtn { background: var(--secondary); color: var(--primary); }
 
-        /* Success State */
         #successArea { display: none; }
-        .success-text { font-size: 1.5rem; color: #800f2f; line-height: 1.6; }
+        .success-text { font-size: 1.4rem; color: #800f2f; line-height: 1.6; }
 
-        /* Animations */
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
@@ -84,7 +79,6 @@
             position: fixed;
             top: -50px;
             pointer-events: none;
-            z-index: 1;
             animation: fall linear forwards;
         }
 
@@ -97,23 +91,23 @@
 
     <div id="envelope" onclick="openLetter()">
         <div class="heart-icon">💌</div>
-        <p style="color: #ff4d6d; font-weight: bold;">Click to open, Navya</p>
+        <p style="color: #ff4d6d; font-weight: bold; margin-top: 10px;">A message for Navya...</p>
     </div>
 
     <div class="container" id="mainContainer">
         <div id="questionArea">
             <h1>Will you be my Valentine, Navya? 🌹</h1>
-            <div class="btn-group">
-                <button id="yesBtn" onclick="showSuccess()">Yes!</button>
-                <button id="noBtn" onmouseover="moveButton()" onclick="moveButton()">No</button>
+            <div class="btn-group" id="btnGroup">
+                <button id="yesBtn" onclick="showSuccess()">Yes</button>
+                <button id="noBtn" onmouseover="swapButtons()" onclick="swapButtons()">No</button>
             </div>
         </div>
 
         <div id="successArea">
             <div class="success-text">
-                <p id="typingText"></p>
-                <h2 style="font-size: 3rem; margin: 10px 0;">🌹❤️🌹</h2>
-                <h3 style="color: var(--primary);">Happy Valentine's Day!</h3>
+                <p id="typingText" style="font-weight: bold;"></p>
+                <h2 style="font-size: 3rem; margin: 15px 0;">🌹❤️🌹</h2>
+                <h3 style="color: var(--primary); margin: 0;">Happy Valentine's Day!</h3>
             </div>
         </div>
     </div>
@@ -122,16 +116,20 @@
         function openLetter() {
             document.getElementById('envelope').style.display = 'none';
             document.getElementById('mainContainer').style.display = 'block';
-            startFloating('❤️', 15);
         }
 
-        function moveButton() {
-            const btn = document.getElementById('noBtn');
-            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
-            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
-            btn.style.position = 'fixed';
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
+        // The Switcheroo Logic
+        function swapButtons() {
+            const btnGroup = document.getElementById('btnGroup');
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            
+            // Check current order and flip it
+            if (btnGroup.style.flexDirection === 'row-reverse') {
+                btnGroup.style.flexDirection = 'row';
+            } else {
+                btnGroup.style.flexDirection = 'row-reverse';
+            }
         }
 
         function showSuccess() {
@@ -139,30 +137,29 @@
             document.getElementById('successArea').style.display = 'block';
             document.body.style.backgroundColor = '#ffb3c1';
             
-            const text = "You just made my heart bloom, wifey...";
+            const text = "You just made my heart bloom, wifey!";
             let i = 0;
             function typeWriter() {
                 if (i < text.length) {
                     document.getElementById("typingText").innerHTML += text.charAt(i);
                     i++;
-                    setTimeout(typeWriter, 100);
+                    setTimeout(typeWriter, 80);
                 }
             }
             typeWriter();
-            startFloating('🌹', 30);
-            startFloating('🌸', 20);
+            startFalling();
         }
 
-        function startFloating(symbol, count) {
-            for (let i = 0; i < count; i++) {
+        function startFalling() {
+            const symbols = ['❤️', '🌹', '🌸', '💖'];
+            for (let i = 0; i < 60; i++) {
                 setTimeout(() => {
                     const el = document.createElement('div');
-                    el.innerHTML = symbol;
+                    el.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
                     el.className = 'falling-element';
                     el.style.left = Math.random() * 100 + 'vw';
                     el.style.fontSize = (Math.random() * 20 + 20) + 'px';
                     el.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                    el.style.opacity = Math.random();
                     document.body.appendChild(el);
                 }, i * 100);
             }
